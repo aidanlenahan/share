@@ -13,6 +13,7 @@
 - [MOOC Python Programing](https://programming-25.mooc.fi/)
 - [FutureCoder](https://futurecoder.io/)
 - [DataCamp Python for Data Science](https://www.datacamp.com/courses/intro-to-python-for-data-science) (free tier, paid)
+- [HackTheBox Academy Python Intro](https://academy.hackthebox.com/course/preview/introduction-to-python-3) (lots of features in free tier)
 
 ### Materials/Tutorials
 - [LearnPython.org](https://www.learnpython.org/) (free)
