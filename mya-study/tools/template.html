@@ -1,0 +1,490 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MYA Study</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:oklch(97.6% 0.006 85); --surface:oklch(99.4% 0.003 85); --sunken:oklch(94.6% 0.008 85);
+  --text:oklch(23% 0.012 260); --muted:oklch(48% 0.014 260); --line:oklch(89% 0.009 85); --line-strong:oklch(80% 0.012 85);
+  --good:oklch(50% 0.12 155); --good-soft:oklch(95% 0.035 155);
+  --bad:oklch(52% 0.16 25); --bad-soft:oklch(95.5% 0.03 25);
+  --g1:oklch(48% 0.11 250); --g1-soft:oklch(94.5% 0.025 250);
+  --g2:oklch(48% 0.12 305); --g2-soft:oklch(94.5% 0.03 305);
+  --g3:oklch(52% 0.12 55);  --g3-soft:oklch(95% 0.03 55);
+  --g4:oklch(50% 0.09 190); --g4-soft:oklch(95% 0.025 190);
+  --g5:oklch(52% 0.13 0);   --g5-soft:oklch(95.5% 0.025 0);
+  --g6:oklch(50% 0.11 145); --g6-soft:oklch(95% 0.03 145);
+  --on-accent:oklch(99% 0.003 85);
+  --shadow:0 1px 2px oklch(30% 0.02 260 / .06), 0 4px 14px oklch(30% 0.02 260 / .05);
+  --ease:cubic-bezier(.16,1,.3,1);
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:oklch(18.5% 0.01 260); --surface:oklch(22% 0.011 260); --sunken:oklch(16% 0.01 260);
+    --text:oklch(93% 0.006 85); --muted:oklch(70% 0.012 260); --line:oklch(29% 0.012 260); --line-strong:oklch(38% 0.014 260);
+    --good:oklch(76% 0.13 155); --good-soft:oklch(29% 0.05 155);
+    --bad:oklch(74% 0.13 25); --bad-soft:oklch(30% 0.06 25);
+    --g1:oklch(76% 0.1 250); --g1-soft:oklch(29% 0.045 250);
+    --g2:oklch(76% 0.1 305); --g2-soft:oklch(29% 0.05 305);
+    --g3:oklch(79% 0.11 60);  --g3-soft:oklch(30% 0.045 60);
+  --g4:oklch(78% 0.09 190); --g4-soft:oklch(29% 0.04 190);
+  --g5:oklch(77% 0.11 0);   --g5-soft:oklch(30% 0.045 0);
+  --g6:oklch(78% 0.12 145); --g6-soft:oklch(29% 0.045 145);
+    --on-accent:oklch(18% 0.01 260);
+    --shadow:0 1px 2px oklch(0% 0 0 / .3), 0 6px 18px oklch(0% 0 0 / .25);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:oklch(18.5% 0.01 260); --surface:oklch(22% 0.011 260); --sunken:oklch(16% 0.01 260);
+  --text:oklch(93% 0.006 85); --muted:oklch(70% 0.012 260); --line:oklch(29% 0.012 260); --line-strong:oklch(38% 0.014 260);
+  --good:oklch(76% 0.13 155); --good-soft:oklch(29% 0.05 155);
+  --bad:oklch(74% 0.13 25); --bad-soft:oklch(30% 0.06 25);
+  --g1:oklch(76% 0.1 250); --g1-soft:oklch(29% 0.045 250);
+  --g2:oklch(76% 0.1 305); --g2-soft:oklch(29% 0.05 305);
+  --g3:oklch(79% 0.11 60);  --g3-soft:oklch(30% 0.045 60);
+  --g4:oklch(78% 0.09 190); --g4-soft:oklch(29% 0.04 190);
+  --g5:oklch(77% 0.11 0);   --g5-soft:oklch(30% 0.045 0);
+  --g6:oklch(78% 0.12 145); --g6-soft:oklch(29% 0.045 145);
+  --on-accent:oklch(18% 0.01 260);
+  --shadow:0 1px 2px oklch(0% 0 0 / .3), 0 6px 18px oklch(0% 0 0 / .25);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scrollbar-color:var(--line-strong) transparent}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.6 "Instrument Sans",ui-sans-serif,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
+::selection{background:var(--gc-soft,var(--g1-soft));color:var(--text)}
+:focus-visible{outline:2px solid var(--gc,var(--g1));outline-offset:2px;border-radius:8px}
+.serif{font-family:Newsreader,Georgia,serif}
+svg.i{width:16px;height:16px;flex:none;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.wrap{max-width:780px;margin:0 auto;padding:0 16px}
+
+header{position:sticky;top:0;z-index:5;background:color-mix(in oklch,var(--bg) 92%,transparent);backdrop-filter:saturate(1.2) blur(10px);border-bottom:1px solid var(--line)}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0 10px}
+.top .subj{margin-left:auto}
+.subj button{font-weight:600}
+.brand{font-size:19px;font-weight:600;letter-spacing:-.01em;margin:0}
+.iconbtn{display:inline-grid;place-items:center;width:36px;height:36px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--muted);cursor:pointer}
+.iconbtn:hover{color:var(--text);border-color:var(--line-strong)}
+nav{display:grid;grid-template-columns:repeat(var(--n,5),minmax(max-content,1fr));overflow-x:auto;scrollbar-width:none;gap:4px;padding:4px;margin-bottom:12px;background:var(--sunken);border-radius:12px}
+nav button{white-space:nowrap;border:0;background:transparent;color:var(--muted);border-radius:9px;padding:8px 6px;font:inherit;font-size:15px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:background .25s var(--ease),color .25s var(--ease)}
+nav button:hover{color:var(--text)}
+nav button .dot{width:8px;height:8px;border-radius:50%;background:var(--gc)}
+nav button[aria-selected="true"]{background:var(--surface);color:var(--text);box-shadow:var(--shadow)}
+nav .short{display:none}
+nav small{font-weight:500;color:var(--muted);font-variant-numeric:tabular-nums}
+
+main{padding:36px 0 96px}
+.intro h2{font-size:clamp(30px,6vw,42px);line-height:1.1;letter-spacing:-.02em;margin:0 0 8px;font-weight:600}
+.intro p{margin:0;color:var(--muted);max-width:62ch;font-size:17px}
+.meta{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;margin:22px 0 0}
+.quizlet{display:inline-flex;align-items:center;gap:8px;background:var(--gc);color:var(--on-accent);text-decoration:none;font-weight:600;padding:10px 16px;border-radius:10px;transition:transform .2s var(--ease),filter .2s}
+.quizlet:hover{filter:brightness(1.08)}
+.quizlet:active{transform:translateY(1px)}
+.counts{color:var(--muted);font-size:14px;font-variant-numeric:tabular-nums}
+.counts b{color:var(--text);font-weight:600}
+
+details.ref{margin:28px 0 0;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+details.ref summary{list-style:none;cursor:pointer;padding:12px 16px;font-weight:600;display:flex;align-items:center;gap:10px}
+details.ref summary::-webkit-details-marker{display:none}
+details.ref summary .chev{margin-left:auto;transition:transform .3s var(--ease);color:var(--muted)}
+details.ref[open] summary .chev{transform:rotate(180deg)}
+details.ref .body{padding:0 16px 14px;font-size:15px;max-width:72ch}
+details.ref h4{margin:6px 0 6px;font-size:13px;font-weight:600;color:var(--muted)}
+details.ref h4 + .flist{margin-bottom:14px}
+.flist{list-style:none;margin:0;padding:0;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.flist li{padding:8px 12px;font-variant-numeric:tabular-nums}
+.flist li + li{border-top:1px solid var(--line)}
+.flist li:nth-child(even){background:var(--sunken)}
+
+.bar{position:sticky;top:var(--hh,112px);z-index:4;background:var(--bg);padding:16px 0 14px;margin:20px 0 4px;border-bottom:1px solid var(--line)}
+.controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between}
+.seg{display:inline-flex;padding:3px;background:var(--sunken);border-radius:10px;gap:2px}
+.seg button{border:0;background:transparent;color:var(--muted);font:inherit;font-size:14px;font-weight:500;padding:6px 11px;border-radius:8px;cursor:pointer}
+.seg button:hover{color:var(--text)}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--text);box-shadow:var(--shadow)}
+.tools{display:flex;gap:6px}
+.tool{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--surface);color:var(--text);font:inherit;font-size:14px;font-weight:500;padding:6px 11px;border-radius:9px;cursor:pointer}
+.tool:hover{border-color:var(--line-strong)}
+.tool[aria-pressed="true"]{border-color:var(--gc);color:var(--gc)}
+.prog{height:6px;border-radius:99px;background:var(--sunken);overflow:hidden;display:flex;margin-top:14px}
+.prog i{display:block;height:100%;transition:width .5s var(--ease)}
+.prog .g{background:var(--good)} .prog .b{background:var(--bad)} .prog .a{background:var(--gc)}
+.stats{display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px 12px;font-size:14px;margin-top:8px;color:var(--muted);font-variant-numeric:tabular-nums}
+.stats b{color:var(--text);font-weight:600}
+.stats .s-good{color:var(--good)} .stats .s-bad{color:var(--bad)}
+
+h3.sec{font-size:22px;font-weight:600;letter-spacing:-.01em;margin:44px 0 14px;line-height:1.25}
+.q{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin-bottom:14px;transition:border-color .3s var(--ease)}
+.q.right{border-color:color-mix(in oklch,var(--good) 55%,var(--line))}
+.q.wrong{border-color:color-mix(in oklch,var(--bad) 55%,var(--line))}
+.stem{max-width:70ch;font-size:16.5px}
+.stem p{margin:10px 0 0} .stem .qn + p{display:inline;margin:0}
+.qn{font-weight:700;color:var(--gc);margin-right:6px;font-variant-numeric:tabular-nums}
+.opts{display:grid;gap:8px;margin-top:16px}
+.opt{display:flex;gap:12px;align-items:flex-start;text-align:left;width:100%;border:1px solid var(--line);background:var(--bg);color:var(--text);border-radius:10px;padding:10px 12px;font:inherit;font-size:15.5px;cursor:pointer;transition:border-color .2s var(--ease),background .2s var(--ease)}
+.opt:hover:not(:disabled){border-color:var(--gc);background:var(--gc-soft)}
+.opt .L{display:inline-grid;place-items:center;flex:none;width:26px;height:26px;border-radius:50%;border:1px solid var(--line-strong);font-size:13px;font-weight:700;color:var(--muted)}
+.opt .t{padding-top:1px}
+.opt .mk{margin-left:auto;align-self:center}
+.opt.sel{border-color:var(--gc);background:var(--gc-soft)}
+.opt.sel .L{background:var(--gc);border-color:var(--gc);color:var(--on-accent)}
+.opt.ok{border-color:var(--good);background:var(--good-soft)}
+.opt.ok .L{background:var(--good);border-color:var(--good);color:var(--on-accent)}
+.opt.ok .mk{color:var(--good)}
+.opt.no{border-color:var(--bad);background:var(--bad-soft)}
+.opt.no .L{background:var(--bad);border-color:var(--bad);color:var(--on-accent)}
+.opt.no .mk{color:var(--bad)}
+.opt:disabled{cursor:default}
+.opt:disabled:not(.ok):not(.no){opacity:.7}
+.exp{margin-top:14px;padding:14px 16px;border-radius:10px;background:var(--sunken);font-size:15px;max-width:72ch}
+.exp.fresh{animation:reveal .45s var(--ease) both}
+@keyframes reveal{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+.exp p{margin:0 0 6px} .exp p:last-child{margin:0}
+.exp .v{font-weight:700;margin-right:4px}
+.right .exp .v{color:var(--good)} .wrong .exp .v{color:var(--bad)}
+table{border-collapse:collapse;margin:10px 0;font-size:14px;display:block;overflow-x:auto;font-variant-numeric:tabular-nums}
+td,th{border:1px solid var(--line);padding:5px 10px;text-align:left}
+th{background:var(--sunken);font-weight:600}
+code{background:var(--sunken);padding:1px 5px;border-radius:5px;font-size:.92em}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.chip{border:1px solid var(--line);background:var(--surface);color:var(--text);font:inherit;font-size:13px;font-weight:500;padding:4px 10px;border-radius:99px;cursor:pointer;font-variant-numeric:tabular-nums}
+.chip:hover{border-color:var(--line-strong)}
+.chip[aria-pressed="true"]{border-color:var(--gc);background:var(--gc-soft);color:var(--text)}
+.chip .pct{color:var(--muted);margin-left:6px}
+.chip .pct.lo{color:var(--bad)} .chip .pct.hi{color:var(--good)}
+.qhead{display:flex;align-items:flex-start;gap:10px}
+.qhead .stem{flex:1;min-width:0}
+.tag{display:inline-block;font-size:12px;font-weight:600;color:var(--gc);background:var(--gc-soft);padding:1px 8px;border-radius:99px;margin-right:8px;vertical-align:2px}
+.flag{flex:none;display:inline-grid;place-items:center;width:32px;height:32px;margin:-4px -6px 0 0;border-radius:8px;border:1px solid transparent;background:none;color:var(--muted);cursor:pointer;opacity:.55}
+.flag:hover{opacity:1;border-color:var(--line)}
+.flag[aria-pressed="true"]{opacity:1;color:var(--gc)}
+.flag[aria-pressed="true"] svg{fill:currentColor}
+.keys{margin-top:8px;font-size:12.5px;color:var(--muted)}
+.keys kbd{font:inherit;font-size:11.5px;font-weight:600;border:1px solid var(--line-strong);border-bottom-width:2px;border-radius:5px;padding:0 5px;background:var(--surface);color:var(--text)}
+@media (hover:none){.keys{display:none}}
+.undo{display:inline-flex;align-items:center;gap:6px;margin-top:10px;border:1px solid var(--line);background:var(--surface);color:var(--muted);font:inherit;font-size:13px;font-weight:500;padding:5px 10px;border-radius:8px;cursor:pointer}
+.undo:hover{color:var(--text);border-color:var(--line-strong)}
+.submit{margin-top:28px;display:flex;justify-content:center}
+.empty{color:var(--muted);text-align:center;padding:48px 16px;border:1px dashed var(--line-strong);border-radius:14px;margin-top:20px}
+@media (max-width:420px){.brand{display:none}}
+@media (max-width:620px){
+  nav .full{display:none} nav .short{display:inline}
+  nav button{padding:8px 4px;gap:6px;font-size:14px}
+  main{padding-top:26px}
+  .bar{position:static}
+  nav small{display:none}
+  .q{padding:16px}
+  .controls{gap:8px}
+  .seg button{padding:6px 9px}
+  .tool span{display:none}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-ext" viewBox="0 0 24 24"><path d="M14 4h6v6"/><path d="M20 4l-9 9"/><path d="M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></symbol>
+  <symbol id="i-shuffle" viewBox="0 0 24 24"><path d="M16 3h5v5"/><path d="M4 20L21 3"/><path d="M21 16v5h-5"/><path d="M15 15l6 6"/><path d="M4 4l5 5"/></symbol>
+  <symbol id="i-reset" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+  <symbol id="i-flag" viewBox="0 0 24 24"><path d="M6 21V4"/><path d="M6 4h11l-2 4 2 4H6"/></symbol>
+  <symbol id="i-redo" viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 4v5h-5"/></symbol>
+  <symbol id="i-chev" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 19V5"/><path d="M8 7h7"/></symbol>
+</svg>
+<header>
+  <div class="wrap">
+    <div class="top">
+      <p class="brand serif">MYA Study</p>
+      <div class="seg subj" id="subjects" role="tablist" aria-label="Subject"></div>
+      <button class="iconbtn" id="theme" aria-label="Toggle light or dark theme"><svg class="i"><use href="#i-moon"/></svg></button>
+    </div>
+    <nav id="tabs" role="tablist" aria-label="Study sets"></nav>
+  </div>
+</header>
+<main class="wrap" id="main"></main>
+<script>
+const PAYLOAD = /*__DATA__*/null;
+const ALL = PAYLOAD.groups;
+const COLOR_OF = Object.fromEntries(ALL.map((g, i) => [g.slug, [`var(--g${i % 6 + 1})`, `var(--g${i % 6 + 1}-soft)`]]));
+const icon = (id, cls='i') => `<svg class="${cls}" aria-hidden="true"><use href="#i-${id}"/></svg>`;
+const store = {
+  get(k, d){ try{ const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; }catch(e){ return d; } },
+  set(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+};
+const state = store.get('mya-chem-v2', null) || store.get('chem713', {tab:0, mode:'instant', groups:{}});
+state.groups ||= {}; state.scroll ||= {};
+ALL.forEach(g => { const x = state.groups[g.slug] ??= {answers:{}, submitted:false, filter:'all', order:null}; x.flags ||= {}; x.tag ||= ''; });
+if(!PAYLOAD.subjects.some(x => x.id === state.subject)) state.subject = PAYLOAD.subjects[0].id;
+state.tabBy ||= {[state.subject]: state.tab || 0};
+let DATA = [];
+function setSubject(id){
+  state.subject = id;
+  DATA = ALL.filter(g => g.subject === id);
+  const t = state.tabBy[id];
+  state.tab = t >= 0 && t < DATA.length ? t : 0;
+}
+setSubject(state.subject);
+const save = () => store.set('mya-chem-v2', state);
+let fresh = null; // question number whose explanation was just revealed
+
+const themeBtn = document.getElementById('theme');
+const isDark = () => (document.documentElement.dataset.theme || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')) === 'dark';
+const applyTheme = t => {
+  if(t) document.documentElement.dataset.theme = t; else delete document.documentElement.dataset.theme;
+  themeBtn.innerHTML = icon(isDark() ? 'sun' : 'moon');
+};
+applyTheme(store.get('mya-chem-theme', store.get('chem713-theme', null)));
+themeBtn.onclick = () => { const next = isDark() ? 'light' : 'dark'; applyTheme(next); store.set('mya-chem-theme', next); };
+
+const tabs = document.getElementById('tabs');
+const subjBox = document.getElementById('subjects');
+PAYLOAD.subjects.forEach(x => {
+  const b = document.createElement('button');
+  b.textContent = x.name; b.dataset.id = x.id; b.setAttribute('role', 'tab');
+  b.onclick = () => {
+    if(state.subject === x.id) return;
+    state.scroll[DATA[state.tab].slug] = Math.round(scrollY);
+    setSubject(x.id); save(); fresh = null; buildTabs(); render();
+    scrollTo(0, state.scroll[DATA[state.tab].slug] || 0);
+  };
+  subjBox.appendChild(b);
+});
+function buildTabs(){
+ tabs.innerHTML = '';
+ tabs.style.setProperty('--n', DATA.length);
+ [...subjBox.children].forEach(b => b.setAttribute('aria-pressed', b.dataset.id === state.subject));
+ DATA.forEach((g, i) => {
+  const b = document.createElement('button');
+  b.setAttribute('role','tab'); b.style.setProperty('--gc', COLOR_OF[g.slug][0]);
+  const short = g.name.replace(/^Lectures? /, 'L ').replace(/^Chapter /, 'Ch ');
+  b.innerHTML = `<span class="dot"></span><span class="full">${g.name}</span><span class="short">${short}</span><small>${g.count}</small>`;
+  b.onclick = () => {
+    if(state.tab === i) return;
+    state.scroll ||= {}; state.scroll[DATA[state.tab].slug] = Math.round(scrollY);
+    state.tab = i; state.tabBy[state.subject] = i; save(); fresh = null; render();
+    scrollTo(0, state.scroll[g.slug] || 0);
+  };
+  tabs.appendChild(b);
+ });
+}
+buildTabs();
+
+const allQs = g => g.sections.flatMap(s => s.qs);
+function graded(gs, q){
+  const a = gs.answers[q.n];
+  if(!a || (state.mode === 'exam' && !gs.submitted)) return null;
+  return a === q.ans;
+}
+const subtitle = g => g.title.replace(/^Lectures?\s[\d–-]+\s*(Practice Problems)?[:\s–-]*/i,'') || 'Practice problems';
+
+function render(){
+  const i = state.tab, g = DATA[i], gs = state.groups[g.slug];
+  [...tabs.children].forEach((b, j) => b.setAttribute('aria-selected', j === i));
+  tabs.children[i].scrollIntoView({block:'nearest', inline:'nearest'});
+  const root = document.documentElement;
+  root.style.setProperty('--gc', COLOR_OF[g.slug][0]); root.style.setProperty('--gc-soft', COLOR_OF[g.slug][1]);
+  const exam = state.mode === 'exam';
+  const main = document.getElementById('main');
+  main.innerHTML = `
+    <section class="intro">
+      <h2 class="serif">${g.name}</h2>
+      <p>${subtitle(g)}</p>
+      <div class="meta">
+        <a class="quizlet" href="${g.quizlet}" target="_blank" rel="noopener">${icon('book')}Study flashcards on Quizlet${icon('ext')}</a>
+        <span class="counts"><b>${g.cards}</b> flashcards · <b>${g.count}</b> practice problems</span>
+      </div>
+      ${g.intro.trim() ? `<details class="ref"><summary>${g.subject === 'psych' ? 'Key frameworks' : 'Formulas and constants'}${icon('chev','i chev')}</summary><div class="body">${g.intro}</div></details>` : ''}
+    </section>
+    <div class="bar">
+      <div class="controls">
+        <div class="seg" role="group" aria-label="Quiz mode">
+          <button data-mode="instant" aria-pressed="${!exam}">Instant feedback</button>
+          <button data-mode="exam" aria-pressed="${exam}">Exam mode</button>
+        </div>
+        <div class="seg" role="group" aria-label="Filter questions">
+          <button data-f="all" aria-pressed="${gs.filter==='all'}">All</button>
+          <button data-f="open" aria-pressed="${gs.filter==='open'}">Unanswered</button>
+          <button data-f="missed" aria-pressed="${gs.filter==='missed'}">Missed</button>
+          <button data-f="flagged" aria-pressed="${gs.filter==='flagged'}">Flagged</button>
+        </div>
+        <div class="tools">
+          <button class="tool" id="retry" title="Clear only the questions you missed, so you can try them again">${icon('redo')}<span>Retry missed</span></button>
+          <button class="tool" id="shuffle" aria-pressed="${!!gs.order}" title="Shuffle question order">${icon('shuffle')}<span>Shuffle</span></button>
+          <button class="tool" id="reset" title="Clear answers for this group">${icon('reset')}<span>Reset</span></button>
+        </div>
+      </div>
+      ${tagsOf(g).length ? `<div class="tags" id="tags"></div>` : ''}
+      <div class="prog" id="prog"></div>
+      <div class="stats" id="stats"></div>
+      <div class="keys">Keys: <kbd>A</kbd>–<kbd>D</kbd> answer · <kbd>F</kbd> flag · <kbd>N</kbd> next unanswered</div>
+    </div>
+    <div id="qs"></div>
+    ${exam && !gs.submitted ? `<div class="submit"><button class="quizlet" id="submit">Submit and grade</button></div>` : ''}`;
+  root.style.setProperty('--hh', document.querySelector('header').offsetHeight + 'px');
+
+  main.querySelectorAll('[data-mode]').forEach(b => b.onclick = () => {
+    if(state.mode === b.dataset.mode) return;
+    state.mode = b.dataset.mode;
+    ALL.forEach(x => { state.groups[x.slug].submitted = false; });
+    fresh = null; save(); render();
+  });
+  main.querySelectorAll('[data-f]').forEach(b => b.onclick = () => { gs.filter = b.dataset.f; fresh = null; save(); render(); });
+  main.querySelector('#reset').onclick = () => {
+    if(!confirm(`Clear all answers for ${g.name}?`)) return;
+    gs.answers = {}; gs.submitted = false; fresh = null; save(); render();
+  };
+  main.querySelector('#retry').onclick = () => {
+    const missed = allQs(g).filter(q => graded(gs, q) === false);
+    if(!missed.length){ alert('Nothing missed to retry yet.'); return; }
+    missed.forEach(q => delete gs.answers[q.n]);
+    gs.submitted = false;
+    gs.filter = 'open'; fresh = null; save(); render(); scrollTo({top:0});
+  };
+  main.querySelector('#shuffle').onclick = () => {
+    if(gs.order) gs.order = null;
+    else { const ns = allQs(g).map(q => q.n); for(let k = ns.length - 1; k > 0; k--){ const r = Math.floor(Math.random()*(k+1)); [ns[k], ns[r]] = [ns[r], ns[k]]; } gs.order = ns; }
+    fresh = null; save(); render();
+  };
+  const sub = main.querySelector('#submit');
+  if(sub) sub.onclick = () => {
+    const left = g.count - Object.keys(gs.answers).length;
+    if(left && !confirm(`${left} question${left > 1 ? 's' : ''} unanswered. Submit anyway?`)) return;
+    gs.submitted = true; fresh = null; save(); render(); scrollTo({top:0, behavior:'smooth'});
+  };
+  drawQs(g, gs); drawStats(g, gs);
+}
+
+const tagsOf = g => [...new Set(allQs(g).map(q => q.tag).filter(Boolean))];
+function drawTags(g, gs){
+  const box = document.getElementById('tags');
+  if(!box) return;
+  const stat = t => {
+    const qs = allQs(g).filter(q => !t || q.tag === t);
+    let r = 0, w = 0; qs.forEach(q => { const v = graded(gs, q); if(v === true) r++; else if(v === false) w++; });
+    const pct = r + w ? Math.round(r/(r+w)*100) : null;
+    const cls = pct === null ? '' : pct < 70 ? 'lo' : pct >= 85 ? 'hi' : '';
+    return `<span class="pct ${cls}">${pct === null ? qs.length + ' Qs' : pct + '%'}</span>`;
+  };
+  box.innerHTML = ['', ...tagsOf(g)].map(t => `<button class="chip" data-tag="${t}" aria-pressed="${gs.tag === t}">${t || 'All'}${stat(t)}</button>`).join('');
+  box.querySelectorAll('.chip').forEach(b => b.onclick = () => { gs.tag = b.dataset.tag; fresh = null; save(); drawQs(g, gs); drawTags(g, gs); });
+}
+function drawStats(g, gs){
+  drawTags(g, gs);
+  let right = 0, wrong = 0;
+  allQs(g).forEach(q => { const r = graded(gs, q); if(r === true) right++; else if(r === false) wrong++; });
+  const answered = Object.keys(gs.answers).length, p = document.getElementById('prog'), s = document.getElementById('stats');
+  if(state.mode === 'exam' && !gs.submitted){
+    p.innerHTML = `<i class="a" style="width:${answered/g.count*100}%"></i>`;
+    s.innerHTML = `<span><b>${answered}</b> of ${g.count} answered</span><span>Graded when you submit</span>`;
+  } else {
+    p.innerHTML = `<i class="g" style="width:${right/g.count*100}%"></i><i class="b" style="width:${wrong/g.count*100}%"></i>`;
+    const pct = right + wrong ? Math.round(right/(right+wrong)*100) : 0;
+    s.innerHTML = `<span><b class="s-good">${right}</b> correct · <b class="s-bad">${wrong}</b> missed · <b>${g.count - right - wrong}</b> left</span>`
+      + `<span>${gs.submitted ? `Final <b>${right}/${g.count}</b> · ` : ''}Accuracy <b>${pct}%</b></span>`;
+  }
+}
+
+function drawQs(g, gs){
+  const box = document.getElementById('qs');
+  const secs = gs.order
+    ? [{title:'Shuffled order', qs: gs.order.map(n => allQs(g).find(q => q.n === n)).filter(Boolean)}]
+    : g.sections;
+  let html = '';
+  secs.forEach(s => {
+    const qs = s.qs.filter(q => (!gs.tag || q.tag === gs.tag) && (
+      gs.filter === 'open' ? !gs.answers[q.n] :
+      gs.filter === 'missed' ? graded(gs, q) === false :
+      gs.filter === 'flagged' ? !!gs.flags[q.n] : true));
+    if(!qs.length) return;
+    if(s.title) html += `<h3 class="sec serif">${s.title}</h3>`;
+    qs.forEach(q => { html += qHTML(gs, q); });
+  });
+  const emptyMsg = {missed:'No missed questions here.', flagged:'No flagged questions here. Use the flag on any question to save it for review.', open:'Every question here is answered.'}[gs.filter] || 'No questions match.';
+  box.innerHTML = html || `<div class="empty">${emptyMsg}</div>`;
+  // Instant mode: clear one answer so a misclick doesn't need a full reset.
+  box.querySelectorAll('.undo').forEach(b => b.onclick = () => {
+    const n = +b.dataset.n;
+    delete gs.answers[n]; fresh = null; save();
+    const y = b.closest('.q').getBoundingClientRect().top;
+    drawQs(g, gs); drawStats(g, gs);
+    const nq = box.querySelector(`.opt[data-n="${n}"]`)?.closest('.q');
+    if(nq) scrollBy(0, nq.getBoundingClientRect().top - y);
+  });
+  box.querySelectorAll('.flag').forEach(b => b.onclick = () => {
+    const n = +b.dataset.n;
+    if(gs.flags[n]) delete gs.flags[n]; else gs.flags[n] = true;
+    save(); b.setAttribute('aria-pressed', !!gs.flags[n]);
+  });
+  box.querySelectorAll('.opt').forEach(b => b.onclick = () => {
+    const n = +b.dataset.n;
+    if(state.mode === 'instant' ? gs.answers[n] : gs.submitted) return;
+    gs.answers[n] = b.dataset.l; fresh = n; save();
+    const y = b.getBoundingClientRect().top;
+    drawQs(g, gs); drawStats(g, gs);
+    const nb = box.querySelector(`.opt[data-n="${n}"]`);
+    if(nb) scrollBy(0, nb.getBoundingClientRect().top - y);
+  });
+}
+
+function qHTML(gs, q){
+  const a = gs.answers[q.n], r = graded(gs, q), done = r !== null;
+  const locked = state.mode === 'instant' ? !!a : gs.submitted;
+  const showExp = done || (state.mode === 'exam' && gs.submitted);
+  const opts = q.opts.map(([L, t]) => {
+    let c = '', mk = '';
+    if(showExp){ if(L === q.ans){ c = 'ok'; mk = icon('check','i mk'); } else if(L === a){ c = 'no'; mk = icon('x','i mk'); } }
+    else if(L === a) c = 'sel';
+    return `<button class="opt ${c}" data-n="${q.n}" data-l="${L}" ${locked ? 'disabled' : ''}><span class="L">${L}</span><span class="t">${t}</span>${mk}</button>`;
+  }).join('');
+  const verdict = r === true ? 'Correct.' : r === false ? `Not quite. The answer is ${q.ans}.` : `Answer: ${q.ans}.`;
+  const exp = showExp ? `<div class="exp${fresh === q.n ? ' fresh' : ''}"><span class="v">${verdict}</span>${q.exp.replace(/^<p>/, '<p style="display:inline">')}</div>` : '';
+  const undo = state.mode === 'instant' && a ? `<button class="undo" data-n="${q.n}">${icon('reset')}<span>Undo answer</span></button>` : '';
+  const tag = q.tag ? `<span class="tag">${q.tag}</span>` : '';
+  const flag = `<button class="flag" data-n="${q.n}" aria-pressed="${!!gs.flags[q.n]}" title="Flag for review" aria-label="Flag question ${q.n} for review">${icon('flag')}</button>`;
+  return `<article class="q ${r === true ? 'right' : r === false ? 'wrong' : ''}${locked ? ' done' : ''}" data-n="${q.n}"><div class="qhead"><div class="stem">${tag}<span class="qn">${q.n}.</span>${q.stem}</div>${flag}</div><div class="opts">${opts}</div>${exp}${undo}</article>`;
+}
+
+render();
+
+// Keyboard: A-D / 1-4 answer the question in view, F flags it, N jumps to the next unanswered one.
+const topEdge = () => document.querySelector('header').offsetHeight + (innerWidth > 620 ? document.querySelector('.bar').offsetHeight : 0);
+const inView = sel => [...document.querySelectorAll(sel)].find(el => el.getBoundingClientRect().bottom > topEdge() + 60);
+addEventListener('keydown', e => {
+  if(e.ctrlKey || e.metaKey || e.altKey || /input|textarea|select/i.test(e.target.tagName)) return;
+  const k = e.key.toLowerCase();
+  const letter = {a:'A', b:'B', c:'C', d:'D', '1':'A', '2':'B', '3':'C', '4':'D'}[k];
+  if(letter){
+    const el = inView('#qs .q:not(.done)');
+    const btn = el && el.querySelector(`.opt[data-l="${letter}"]`);
+    if(btn && !btn.disabled){ e.preventDefault(); btn.click(); }
+  } else if(k === 'f'){
+    const el = inView('#qs .q'); if(el){ e.preventDefault(); el.querySelector('.flag').click(); }
+  } else if(k === 'n'){
+    const cur = inView('#qs .q');
+    const all = [...document.querySelectorAll('#qs .q:not(.done)')];
+    const next = all.find(x => cur && x !== cur && x.getBoundingClientRect().top > cur.getBoundingClientRect().top) || all[0];
+    if(next){ e.preventDefault(); scrollBy({top: next.getBoundingClientRect().top - topEdge() - 16, behavior:'smooth'}); }
+  }
+});
+// Remember where you were in each tab, so a reopened page lands in the same spot.
+state.scroll ||= {};
+requestAnimationFrame(() => scrollTo(0, state.scroll[DATA[state.tab].slug] || 0));
+let scrollTimer;
+addEventListener('scroll', () => {
+  clearTimeout(scrollTimer);
+  scrollTimer = setTimeout(() => { state.scroll[DATA[state.tab].slug] = Math.round(scrollY); save(); }, 200);
+}, {passive:true});
+</script>
+</body>
+</html>
