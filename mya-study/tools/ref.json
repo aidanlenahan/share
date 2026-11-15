@@ -33,5 +33,25 @@
   "name": "Lectures 8–9",
   "subtitle": "Drawing rules, resonance, octet exceptions, oxidation numbers, VSEPR and polarity",
   "ref_html": "<h4>Formulas</h4><ul class='flist'><li>Formal charge = valence e⁻ − lone-pair electrons − number of bonds</li><li>Electron count on A = valence e⁻ of A + number of bonds − formal charge</li><li>Nonbonding electrons on A = valence e⁻ of A − number of bonds − formal charge</li><li>Unknown oxidation number = charge on species − Σ(known oxidation numbers)</li><li>Steric number SN = CN (atoms bonded) + LP (lone pairs); VSEPR notation AXₓEₑ with x + e = SN</li></ul><h4>Conventions</h4><ul class='flist'><li>Common valence (bonds needed to fill the valence shell, from XHₙ): H 1, F 1, Cl 1, O 2, N 3, C 4</li><li>Double bond counts as 2 bonds, triple bond as 3 bonds (for electron counts); a multiple bond counts as one domain in VSEPR</li><li>Oxidation numbers: element = 0; F always −1; O usually −2 (not with F or in O–O bonds); H +1 with nonmetals, −1 with metals, B or Si</li><li>SN 2 linear · 3 trigonal planar · 4 tetrahedral · 5 trigonal bipyramidal · 6 octahedral · 7 pentagonal bipyramidal</li></ul>"
+ },
+ "l12": {
+  "name": "Lecture 12",
+  "subtitle": "Wave-particle duality, de Broglie, the uncertainty principle and the particle in a box",
+  "ref_html": "<h4>Formulas</h4><ul class='flist'><li>de Broglie: λ = h/p = h/mv</li><li>Photon momentum: p = h/λ</li><li>Standing wave on a Bohr orbit: nλ = 2πr</li><li>Uncertainty principle: Δx · Δp ≥ h/4π</li><li>Δv = Δp/m</li><li>Schrödinger: HΨ = EΨ; Ψ² = probability density</li><li>Particle in a 1-D box: Eₙ = n²h²/8mL², n = 1, 2, 3, …</li><li>Ψₙ(x) = (2/L)<sup>½</sup> sin(nπx/L); level n has n − 1 nodes</li><li>Photon energy: E = hc/λ</li></ul><h4>Constants</h4><ul class='flist'><li>h = 6.626 × 10⁻³⁴ J·s</li><li>mₑ = 9.109 × 10⁻³¹ kg</li><li>c = 3.00 × 10⁸ m/s</li></ul>"
+ },
+ "l13": {
+  "name": "Lecture 13",
+  "subtitle": "Hydrogen atom orbitals, quantum numbers, orbital shapes and the radial distribution function",
+  "ref_html": "<h4>Formulas</h4><ul class='flist'><li>Eₙ = −R<sub>E</sub> Z²/n² (one-electron atoms)</li><li>ΔE = R<sub>E</sub> Z² (1/n₁² − 1/n₂²) = hc/λ</li><li>Ψₙₗₘₗ = Rₙₗ(r) · Yₗₘₗ(θ, φ)</li><li>|L| = √[l(l + 1)] ħ; L<sub>z</sub> = mₗħ (ħ = h/2π)</li><li>Radial distribution = 4πr² R²(r)</li></ul><h4>Quantum numbers</h4><ul class='flist'><li>n = 1, 2, 3, … (size and energy)</li><li>l = 0, 1, …, n − 1 (shape): s, p, d, f</li><li>mₗ = −l … +l (orientation): 2l + 1 orbitals</li><li>n subshells and n² orbitals per shell</li><li>Hydrogen: energy depends only on n</li></ul><h4>Constants</h4><ul class='flist'><li>R<sub>E</sub> = 2.18 × 10⁻¹⁸ J = 13.6 eV</li><li>a₀ = 0.529 Å</li><li>h = 6.626 × 10⁻³⁴ J·s; c = 3.00 × 10⁸ m/s</li></ul>"
+ },
+ "l14": {
+  "name": "Lecture 14",
+  "subtitle": "Nodes, spin, effective nuclear charge, the Aufbau principle, Pauli and Hund",
+  "ref_html": "<h4>Formulas</h4><ul class='flist'><li>Total nodes = n − 1; angular = l; radial = n − l − 1</li><li>Hydrogen-like IE (1s) = Z² R<sub>E</sub></li><li>Zeff = Z − S</li><li>Polyelectron atoms: Eₙ,ₗ = −R<sub>E</sub> Zeff²/n²</li><li>Max electrons per shell = 2n²</li></ul><h4>Rules</h4><ul class='flist'><li>Zeff(1s) &gt; Zeff(2s) &gt; Zeff(3s); Zeff(ns) &gt; Zeff(np) &gt; Zeff(nd)</li><li>E(ns) &lt; E(np) &lt; E(nd) in polyelectron atoms</li><li>n + l rule: lower n + l fills first; on a tie, lower n first</li><li>Order: 1s 2s 2p 3s 3p 4s 3d 4p 5s 4d 5p 6s 4f 5d 6p 7s 5f 6d 7p</li><li>Pauli: no two electrons share all four quantum numbers</li><li>Hund: separate orbitals, parallel spins first</li><li>mₛ = +½ or −½</li></ul><h4>Constants</h4><ul class='flist'><li>R<sub>E</sub> = 2.18 × 10⁻¹⁸ J = 13.6 eV</li></ul>"
+ },
+ "l15": {
+  "name": "Lecture 15",
+  "subtitle": "Transition metal configurations, periodic trends, limits of the Lewis model and σ/π bonds",
+  "ref_html": "<h4>Configurations</h4><ul class='flist'><li>K [Ar]4s¹; Ca [Ar]4s²</li><li>Usual first-row pattern: 3dⁿ4s²</li><li>Exceptions: Cr 3d⁵4s¹, Cu 3d¹⁰4s¹</li><li>Cations Mⁿ⁺: 3dⁿ (remove 4s first)</li></ul><h4>Periodic trends</h4><ul class='flist'><li>Radius: increases down a group, decreases across a period</li><li>IE: increases across a period, decreases down a group</li><li>IE dips: B &lt; Be, Al &lt; Mg (np less penetrating); O &lt; N (pairing)</li><li>EA = ΔE for X(g) + e⁻ → X⁻(g); negative = energy released</li><li>Most negative EA: halogens; positive EA: noble gases, Be, Mg</li></ul><h4>Bonds</h4><ul class='flist'><li>Single = 1σ; double = 1σ + 1π; triple = 1σ + 2π</li><li>σ: end-on overlap, cylindrically symmetric</li><li>π: side-by-side overlap, node along the bond axis, weaker</li></ul>"
  }
 }

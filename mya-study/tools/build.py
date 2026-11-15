@@ -12,7 +12,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 TOOLS = ROOT / "tools"
 
-SUBJECTS = [("chem", "Chemistry"), ("psych", "Psychology")]
+SUBJECTS = [("chem", "Chemistry"), ("psych", "Psychology"), ("chem2", "Chem 11-15")]
 GROUPS = [
     # subject, slug, tab name, practice file, flashcard file, Quizlet URL
     ("chem", "7-8", "Lectures 7–8", "chem/Lectures_7-8_Practice_Problems.md", "chem/flashcards/Lectures_7-8_Flashcards.txt",
@@ -29,6 +29,10 @@ GROUPS = [
      "https://quizlet.com/1227360162/mya-chem-lectures-8-9-flash-cards"),
     ("psych", "psych-3-5", "Chapters 3–5", "psych/Psych_Ch3-5_Practice_Exam.md", "psych/flashcards/Psych_Ch3-5_Flashcards.txt",
      "https://quizlet.com/1230928513/"),
+    ("chem2", "l12", "Lecture 12", "chem/Lecture_12_Practice_Problems.md", "chem/flashcards/Lecture_12_Flashcards.txt", ""),
+    ("chem2", "l13", "Lecture 13", "chem/Lecture_13_Practice_Problems.md", "chem/flashcards/Lecture_13_Flashcards.txt", ""),
+    ("chem2", "l14", "Lecture 14", "chem/Lecture_14_Practice_Problems.md", "chem/flashcards/Lecture_14_Flashcards.txt", ""),
+    ("chem2", "l15", "Lecture 15", "chem/Lecture_15_Practice_Problems.md", "chem/flashcards/Lecture_15_Flashcards.txt", ""),
 ]
 
 def inline(s):

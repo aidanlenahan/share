@@ -301,7 +301,7 @@ function render(){
       <h2 class="serif">${g.name}</h2>
       <p>${subtitle(g)}</p>
       <div class="meta">
-        <a class="quizlet" href="${g.quizlet}" target="_blank" rel="noopener">${icon('book')}Study flashcards on Quizlet${icon('ext')}</a>
+        ${g.quizlet ? `<a class="quizlet" href="${g.quizlet}" target="_blank" rel="noopener">${icon('book')}Study flashcards on Quizlet${icon('ext')}</a>` : ''}
         <span class="counts"><b>${g.cards}</b> flashcards · <b>${g.count}</b> practice problems</span>
       </div>
       ${g.intro.trim() ? `<details class="ref"><summary>${g.subject === 'psych' ? 'Key frameworks' : 'Formulas and constants'}${icon('chev','i chev')}</summary><div class="body">${g.intro}</div></details>` : ''}
