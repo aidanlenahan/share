@@ -29,10 +29,14 @@ GROUPS = [
      "https://quizlet.com/1227360162/mya-chem-lectures-8-9-flash-cards"),
     ("psych", "psych-3-5", "Chapters 3–5", "psych/Psych_Ch3-5_Practice_Exam.md", "psych/flashcards/Psych_Ch3-5_Flashcards.txt",
      "https://quizlet.com/1230928513/"),
-    ("chem2", "l12", "Lecture 12", "chem/Lecture_12_Practice_Problems.md", "chem/flashcards/Lecture_12_Flashcards.txt", ""),
-    ("chem2", "l13", "Lecture 13", "chem/Lecture_13_Practice_Problems.md", "chem/flashcards/Lecture_13_Flashcards.txt", ""),
-    ("chem2", "l14", "Lecture 14", "chem/Lecture_14_Practice_Problems.md", "chem/flashcards/Lecture_14_Flashcards.txt", ""),
-    ("chem2", "l15", "Lecture 15", "chem/Lecture_15_Practice_Problems.md", "chem/flashcards/Lecture_15_Flashcards.txt", ""),
+    ("chem2", "l12", "Lecture 12", "chem/Lecture_12_Practice_Problems.md", "chem/flashcards/Lecture_12_Flashcards.txt",
+     "https://quizlet.com/1235720323/mya-chem-lecture-12-flash-cards"),
+    ("chem2", "l13", "Lecture 13", "chem/Lecture_13_Practice_Problems.md", "chem/flashcards/Lecture_13_Flashcards.txt",
+     "https://quizlet.com/1235720659/mya-chem-lecture-13-flash-cards"),
+    ("chem2", "l14", "Lecture 14", "chem/Lecture_14_Practice_Problems.md", "chem/flashcards/Lecture_14_Flashcards.txt",
+     "https://quizlet.com/1235720913/mya-chem-lecture-14-flash-cards"),
+    ("chem2", "l15", "Lecture 15", "chem/Lecture_15_Practice_Problems.md", "chem/flashcards/Lecture_15_Flashcards.txt",
+     "https://quizlet.com/1235721240/mya-chem-lecture-15-flash-cards"),
 ]
 
 def inline(s):
