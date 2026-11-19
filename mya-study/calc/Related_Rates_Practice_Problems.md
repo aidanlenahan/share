@@ -18,6 +18,8 @@ Volume of a sphere: \(V = \tfrac{4}{3}\pi r^3\). Surface area of a sphere: \(S =
 
 Volume of a prism (trough): \(V = (\text{area of cross-section})(\text{length}) = \tfrac{1}{2}\, b\, h \cdot L\), where \(b\) is the width of the water's surface and \(h\) is the water's depth.
 
+**6.** A spotlight on the ground shines on a wall \(12\) m away. A man \(2\) m tall walks from the spotlight straight toward the wall at \(1.6\) m/s. How fast is the length of his shadow on the wall changing when he is \(4\) m from the wall? Is the shadow getting longer or shorter? Include units.
+
 ## Answer Key
 
 **1.**
@@ -154,3 +156,31 @@ $$12 = 30(0.5)\,\frac{dh}{dt} = 15\,\frac{dh}{dt} \quad\Longrightarrow\quad \fra
 In inches: \(\tfrac45 \cdot 12 = 9.6\) in/min.
 
 **Final answer:** the water level is rising at **\(\tfrac{4}{5}\) ft/min** (\(= 9.6\) in/min).
+
+**6.**
+**Step 1 — Draw and name the variables.** Put the spotlight at ground level. The light ray passes over the top of the man's head and hits the wall. Let \(x\) be the man's distance from the spotlight and \(y\) the height of his shadow on the wall (both in m). The spotlight-to-wall distance is fixed at \(12\) m.
+
+**Step 2 — Given and wanted.** He walks away from the spotlight, so \(x\) is increasing. When he is \(4\) m from the wall, he is \(12 - 4 = 8\) m from the spotlight:
+
+$$x = 8, \qquad \frac{dx}{dt} = 1.6 \text{ m/s}, \qquad \text{find } \frac{dy}{dt}.$$
+
+**Step 3 — Set up the similar triangles.** The ray from the spotlight makes two right triangles that share the angle at the spotlight:
+
+- small triangle: base \(x\) (spotlight to man), height \(2\) (the man)
+- large triangle: base \(12\) (spotlight to wall), height \(y\) (the shadow)
+
+Corresponding sides are proportional (height over base):
+
+$$\frac{y}{12} = \frac{2}{x} \quad\Longrightarrow\quad y = \frac{24}{x} = 24x^{-1}.$$
+
+**Step 4 — Differentiate with respect to \(t\).**
+
+$$\frac{dy}{dt} = -24x^{-2}\,\frac{dx}{dt} = -\frac{24}{x^2}\,\frac{dx}{dt}.$$
+
+**Step 5 — Plug in and solve.**
+
+$$\frac{dy}{dt} = -\frac{24}{8^2}(1.6) = -\frac{24}{64}(1.6) = -\frac{3}{8}(1.6) = -0.6 \text{ m/s}.$$
+
+**Step 6 — Interpret.** The negative sign means the shadow is getting shorter. That makes sense: as he gets closer to the wall, he blocks less of the light's spread. (Check: at \(x = 8\) the shadow is \(y = 24/8 = 3\) m tall.)
+
+**Final answer:** the shadow is **getting shorter at 0.6 m/s**.
