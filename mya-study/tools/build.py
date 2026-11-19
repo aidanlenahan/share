@@ -5,6 +5,10 @@ Usage:  python tools/build.py            (run from anywhere; paths are relative 
 Each group needs a practice file (`**N.** stem`, four `- A.`..`- D.` options, then
 `## Answer Key` with `**N. X.** explanation`) and a Quizlet flashcard file
 (`term\\wd\\definition\\ww\\...`). Reference-dropdown content lives in tools/ref.json.
+
+Open-ended groups (no flashcard file, cards=None) use `**N.** stem` with no options, and
+`**N.**` on its own line in the Answer Key followed by the worked solution. Math is KaTeX:
+\\( inline \\) and $$ display $$ (single $ is left alone so dollar amounts stay plain text).
 """
 import json, re, html
 from pathlib import Path
@@ -12,7 +16,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 TOOLS = ROOT / "tools"
 
-SUBJECTS = [("chem", "Chemistry"), ("psych", "Psychology"), ("chem2", "Chem 11-15")]
+SUBJECTS = [("chem", "Chemistry"), ("psych", "Psychology"), ("chem2", "Chem 11-15"), ("calc", "Calc")]
 GROUPS = [
     # subject, slug, tab name, practice file, flashcard file, Quizlet URL
     ("chem", "7-8", "Lectures 7–8", "chem/Lectures_7-8_Practice_Problems.md", "chem/flashcards/Lectures_7-8_Flashcards.txt",
@@ -37,6 +41,8 @@ GROUPS = [
      "https://quizlet.com/1235720913/mya-chem-lecture-14-flash-cards"),
     ("chem2", "l15", "Lecture 15", "chem/Lecture_15_Practice_Problems.md", "chem/flashcards/Lecture_15_Flashcards.txt",
      "https://quizlet.com/1235721240/mya-chem-lecture-15-flash-cards"),
+    ("calc", "opt", "Optimization", "calc/Optimization_Practice_Problems.md", None, None),
+    ("calc", "rr", "Related Rates", "calc/Related_Rates_Practice_Problems.md", None, None),
 ]
 
 def inline(s):
@@ -129,20 +135,59 @@ def parse(path):
             for q in sec["qs"]: q["tag"] = ""
     return out
 
+OANS = re.compile(r"^\*\*(\d+)\.\*\*\s*(.*)$")
+
+def parse_open(path):
+    """Open-ended set: stems with no options; the answer key holds a worked solution per question."""
+    text = path.read_text(encoding="utf-8").splitlines()
+    k = next(i for i, l in enumerate(text) if re.match(r"^#+\s*Answer Key", l))
+    body, key = text[:k], text[k + 1:]
+    sections, cur, q = [], None, None
+    for l in body[1:]:
+        m = QSTART.match(l)
+        if l.startswith("## "):
+            cur = {"title": l[3:].strip(), "qs": []}; sections.append(cur); q = None; continue
+        if m:
+            if cur is None:
+                cur = {"title": "", "qs": []}; sections.append(cur)
+            q = {"n": int(m.group(1)), "stem": [m.group(2)]}; cur["qs"].append(q); continue
+        if q is not None:
+            q["stem"].append(l)
+    sols, last = {}, None
+    for l in key:
+        m = OANS.match(l)
+        if m:
+            last = int(m.group(1)); sols[last] = [m.group(2)]
+        elif last:
+            sols[last].append(l)
+    out, seen = [], set()
+    for s in sections:
+        qs = []
+        for q in s["qs"]:
+            assert q["n"] not in seen, (path.name, "duplicate number", q["n"]); seen.add(q["n"])
+            qs.append({"n": q["n"], "open": True, "stem": block(q["stem"]), "opts": [],
+                       "ans": "R", "exp": block(sols[q["n"]]), "tag": ""})
+        if qs: out.append({"title": s["title"], "qs": qs})
+    assert set(sols) == seen, (path.name, "answer key mismatch", sorted(set(sols) ^ seen))
+    return out
+
 def main():
     ref = json.loads((TOOLS / "ref.json").read_text(encoding="utf-8"))
     data = []
     for subject, slug, name, exam, cards, quizlet in GROUPS:
-        if not (ROOT / exam).exists() or not (ROOT / cards).exists():
+        if not (ROOT / exam).exists() or (cards and not (ROOT / cards).exists()):
             print(f"SKIP {slug}: missing {exam if not (ROOT / exam).exists() else cards}"); continue
-        secs = parse(ROOT / exam)
+        secs = parse(ROOT / exam) if cards else parse_open(ROOT / exam)
         n = sum(len(s["qs"]) for s in secs)
-        card_text = (ROOT / cards).read_text(encoding="utf-8")
-        ncards = len(card_text.split("\\ww\\"))
-        assert card_text.count("\\wd\\") == ncards, (cards, "separator mismatch")
+        ncards = 0
+        if cards:
+            card_text = (ROOT / cards).read_text(encoding="utf-8")
+            ncards = len(card_text.split("\\ww\\"))
+            assert card_text.count("\\wd\\") == ncards, (cards, "separator mismatch")
         r = ref.get(slug, {})
         data.append({"subject": subject, "slug": slug, "name": name, "title": r.get("subtitle", ""),
-                     "intro": r.get("ref_html", ""), "sections": secs, "count": n, "cards": ncards, "quizlet": quizlet})
+                     "intro": r.get("ref_html", ""), "sections": secs, "count": n, "cards": ncards, "quizlet": quizlet,
+                     **({"open": True} if not cards else {})})
         print(f"{subject:6} {slug:10} {n:3} questions {ncards:4} cards")
     present = {g["subject"] for g in data}
     payload = {"subjects": [{"id": i, "name": nm} for i, nm in SUBJECTS if i in present], "groups": data}

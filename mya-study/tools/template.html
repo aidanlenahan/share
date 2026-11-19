@@ -7,6 +7,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
 <style>
 :root{
   --bg:oklch(97.6% 0.006 85); --surface:oklch(99.4% 0.003 85); --sunken:oklch(94.6% 0.008 85);
@@ -173,6 +176,18 @@ code{background:var(--sunken);padding:1px 5px;border-radius:5px;font-size:.92em}
 .undo:hover{color:var(--text);border-color:var(--line-strong)}
 .submit{margin-top:28px;display:flex;justify-content:center}
 .empty{color:var(--muted);text-align:center;padding:48px 16px;border:1px dashed var(--line-strong);border-radius:14px;margin-top:20px}
+.katex{font-size:1.06em}
+.katex-display{overflow-x:auto;overflow-y:hidden;padding:4px 0;margin:10px 0}
+.stem .katex-display{margin:12px 0}
+.reveal{margin-top:16px}
+.reveal .chev{transition:transform .3s var(--ease)}
+.reveal[aria-expanded="true"] .chev{transform:rotate(180deg)}
+.exp.sol{padding:16px 18px}
+.exp.sol p{margin:0 0 10px}
+.exp.sol .v{display:block;margin:0 0 8px}
+.self{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:14px;padding-top:12px;border-top:1px solid var(--line);font-size:14px;color:var(--muted)}
+.self .tool[data-v="R"][aria-pressed="true"]{border-color:var(--good);color:var(--good);background:var(--good-soft)}
+.self .tool[data-v="W"][aria-pressed="true"]{border-color:var(--bad);color:var(--bad);background:var(--bad-soft)}
 @media (max-width:420px){.brand{display:none}}
 @media (max-width:620px){
   nav .full{display:none} nav .short{display:inline}
@@ -184,6 +199,7 @@ code{background:var(--sunken);padding:1px 5px;border-radius:5px;font-size:.92em}
   .controls{gap:8px}
   .seg button{padding:6px 9px}
   .tool span{display:none}
+  .self .tool span{display:inline}
 }
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
@@ -224,7 +240,7 @@ const store = {
 };
 const state = store.get('mya-chem-v2', null) || store.get('chem713', {tab:0, mode:'instant', groups:{}});
 state.groups ||= {}; state.scroll ||= {};
-ALL.forEach(g => { const x = state.groups[g.slug] ??= {answers:{}, submitted:false, filter:'all', order:null}; x.flags ||= {}; x.tag ||= ''; });
+ALL.forEach(g => { const x = state.groups[g.slug] ??= {answers:{}, submitted:false, filter:'all', order:null}; x.flags ||= {}; x.tag ||= ''; x.revealed ||= {}; });
 if(!PAYLOAD.subjects.some(x => x.id === state.subject)) state.subject = PAYLOAD.subjects[0].id;
 state.tabBy ||= {[state.subject]: state.tab || 0};
 let DATA = [];
@@ -237,6 +253,9 @@ function setSubject(id){
 setSubject(state.subject);
 const save = () => store.set('mya-chem-v2', state);
 let fresh = null; // question number whose explanation was just revealed
+// KaTeX: \( inline \) and $$ display $$ only, so plain dollar amounts in chem/psych text are untouched.
+const typeset = el => { if(el && window.renderMathInElement) renderMathInElement(el, {delimiters:[
+  {left:'$$', right:'$$', display:true}, {left:'\\[', right:'\\]', display:true}, {left:'\\(', right:'\\)', display:false}], throwOnError:false}); };
 
 const themeBtn = document.getElementById('theme');
 const isDark = () => (document.documentElement.dataset.theme || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')) === 'dark';
@@ -283,6 +302,7 @@ buildTabs();
 const allQs = g => g.sections.flatMap(s => s.qs);
 function graded(gs, q){
   const a = gs.answers[q.n];
+  if(q.open) return a ? a === 'R' : null; // open-ended: self-graded after revealing the solution
   if(!a || (state.mode === 'exam' && !gs.submitted)) return null;
   return a === q.ans;
 }
@@ -294,7 +314,7 @@ function render(){
   tabs.children[i].scrollIntoView({block:'nearest', inline:'nearest'});
   const root = document.documentElement;
   root.style.setProperty('--gc', COLOR_OF[g.slug][0]); root.style.setProperty('--gc-soft', COLOR_OF[g.slug][1]);
-  const exam = state.mode === 'exam';
+  const open = !!g.open, exam = !open && state.mode === 'exam';
   const main = document.getElementById('main');
   main.innerHTML = `
     <section class="intro">
@@ -302,19 +322,19 @@ function render(){
       <p>${subtitle(g)}</p>
       <div class="meta">
         ${g.quizlet ? `<a class="quizlet" href="${g.quizlet}" target="_blank" rel="noopener">${icon('book')}Study flashcards on Quizlet${icon('ext')}</a>` : ''}
-        <span class="counts"><b>${g.cards}</b> flashcards · <b>${g.count}</b> practice problems</span>
+        <span class="counts">${g.cards ? `<b>${g.cards}</b> flashcards · ` : ''}<b>${g.count}</b> ${open ? 'open-ended problems with worked solutions' : 'practice problems'}</span>
       </div>
-      ${g.intro.trim() ? `<details class="ref"><summary>${g.subject === 'psych' ? 'Key frameworks' : 'Formulas and constants'}${icon('chev','i chev')}</summary><div class="body">${g.intro}</div></details>` : ''}
+      ${g.intro.trim() ? `<details class="ref"><summary>${g.subject === 'psych' ? 'Key frameworks' : open ? 'Strategy and formulas' : 'Formulas and constants'}${icon('chev','i chev')}</summary><div class="body">${g.intro}</div></details>` : ''}
     </section>
     <div class="bar">
       <div class="controls">
-        <div class="seg" role="group" aria-label="Quiz mode">
+        ${open ? '' : `<div class="seg" role="group" aria-label="Quiz mode">
           <button data-mode="instant" aria-pressed="${!exam}">Instant feedback</button>
           <button data-mode="exam" aria-pressed="${exam}">Exam mode</button>
-        </div>
+        </div>`}
         <div class="seg" role="group" aria-label="Filter questions">
           <button data-f="all" aria-pressed="${gs.filter==='all'}">All</button>
-          <button data-f="open" aria-pressed="${gs.filter==='open'}">Unanswered</button>
+          <button data-f="open" aria-pressed="${gs.filter==='open'}">${open ? 'Not graded' : 'Unanswered'}</button>
           <button data-f="missed" aria-pressed="${gs.filter==='missed'}">Missed</button>
           <button data-f="flagged" aria-pressed="${gs.filter==='flagged'}">Flagged</button>
         </div>
@@ -327,7 +347,7 @@ function render(){
       ${tagsOf(g).length ? `<div class="tags" id="tags"></div>` : ''}
       <div class="prog" id="prog"></div>
       <div class="stats" id="stats"></div>
-      <div class="keys">Keys: <kbd>A</kbd>–<kbd>D</kbd> answer · <kbd>F</kbd> flag · <kbd>N</kbd> next unanswered</div>
+      <div class="keys">${open ? 'Keys: <kbd>S</kbd> show or hide solution · <kbd>F</kbd> flag · <kbd>N</kbd> next not graded' : 'Keys: <kbd>A</kbd>–<kbd>D</kbd> answer · <kbd>F</kbd> flag · <kbd>N</kbd> next unanswered'}</div>
     </div>
     <div id="qs"></div>
     ${exam && !gs.submitted ? `<div class="submit"><button class="quizlet" id="submit">Submit and grade</button></div>` : ''}`;
@@ -342,7 +362,7 @@ function render(){
   main.querySelectorAll('[data-f]').forEach(b => b.onclick = () => { gs.filter = b.dataset.f; fresh = null; save(); render(); });
   main.querySelector('#reset').onclick = () => {
     if(!confirm(`Clear all answers for ${g.name}?`)) return;
-    gs.answers = {}; gs.submitted = false; fresh = null; save(); render();
+    gs.answers = {}; gs.revealed = {}; gs.submitted = false; fresh = null; save(); render();
   };
   main.querySelector('#retry').onclick = () => {
     const missed = allQs(g).filter(q => graded(gs, q) === false);
@@ -363,6 +383,7 @@ function render(){
     gs.submitted = true; fresh = null; save(); render(); scrollTo({top:0, behavior:'smooth'});
   };
   drawQs(g, gs); drawStats(g, gs);
+  if(open) typeset(main.querySelector('.intro'));
 }
 
 const tagsOf = g => [...new Set(allQs(g).map(q => q.tag).filter(Boolean))];
@@ -384,7 +405,7 @@ function drawStats(g, gs){
   let right = 0, wrong = 0;
   allQs(g).forEach(q => { const r = graded(gs, q); if(r === true) right++; else if(r === false) wrong++; });
   const answered = Object.keys(gs.answers).length, p = document.getElementById('prog'), s = document.getElementById('stats');
-  if(state.mode === 'exam' && !gs.submitted){
+  if(state.mode === 'exam' && !gs.submitted && !g.open){
     p.innerHTML = `<i class="a" style="width:${answered/g.count*100}%"></i>`;
     s.innerHTML = `<span><b>${answered}</b> of ${g.count} answered</span><span>Graded when you submit</span>`;
   } else {
@@ -412,6 +433,20 @@ function drawQs(g, gs){
   });
   const emptyMsg = {missed:'No missed questions here.', flagged:'No flagged questions here. Use the flag on any question to save it for review.', open:'Every question here is answered.'}[gs.filter] || 'No questions match.';
   box.innerHTML = html || `<div class="empty">${emptyMsg}</div>`;
+  if(g.open) typeset(box);
+  // Open-ended: reveal/hide the worked solution, then self-grade (click again to clear).
+  const keep = (el, n, sel) => { const y = el.getBoundingClientRect().top; drawQs(g, gs); drawStats(g, gs);
+    const ne = box.querySelector(`${sel}[data-n="${n}"]`); if(ne) scrollBy(0, ne.getBoundingClientRect().top - y); };
+  box.querySelectorAll('.reveal').forEach(b => b.onclick = () => {
+    const n = +b.dataset.n;
+    if(gs.revealed[n]) delete gs.revealed[n]; else { gs.revealed[n] = true; fresh = n; }
+    save(); keep(b, n, '.reveal');
+  });
+  box.querySelectorAll('.self .tool').forEach(b => b.onclick = () => {
+    const n = +b.dataset.n;
+    if(gs.answers[n] === b.dataset.v) delete gs.answers[n]; else gs.answers[n] = b.dataset.v;
+    fresh = null; save(); keep(b, n, '.reveal');
+  });
   // Instant mode: clear one answer so a misclick doesn't need a full reset.
   box.querySelectorAll('.undo').forEach(b => b.onclick = () => {
     const n = +b.dataset.n;
@@ -437,7 +472,20 @@ function drawQs(g, gs){
   });
 }
 
+function openHTML(gs, q){
+  const a = gs.answers[q.n], r = graded(gs, q), rev = !!gs.revealed[q.n];
+  const flag = `<button class="flag" data-n="${q.n}" aria-pressed="${!!gs.flags[q.n]}" title="Flag for review" aria-label="Flag question ${q.n} for review">${icon('flag')}</button>`;
+  const btn = `<button class="tool reveal" data-n="${q.n}" aria-expanded="${rev}">${rev ? 'Hide' : 'Show'} worked solution${icon('chev','i chev')}</button>`;
+  const sol = rev ? `<div class="exp sol${fresh === q.n ? ' fresh' : ''}"><span class="v">Worked solution</span>${q.exp}
+    <div class="self">How did you do?
+      <button class="tool" data-n="${q.n}" data-v="R" aria-pressed="${a === 'R'}">${icon('check')}<span>Got it</span></button>
+      <button class="tool" data-n="${q.n}" data-v="W" aria-pressed="${a === 'W'}">${icon('x')}<span>Missed it</span></button>
+    </div></div>` : '';
+  return `<article class="q ${r === true ? 'right' : r === false ? 'wrong' : ''}${a ? ' done' : ''}" data-n="${q.n}"><div class="qhead"><div class="stem"><span class="qn">${q.n}.</span>${q.stem}</div>${flag}</div>${btn}${sol}</article>`;
+}
+
 function qHTML(gs, q){
+  if(q.open) return openHTML(gs, q);
   const a = gs.answers[q.n], r = graded(gs, q), done = r !== null;
   const locked = state.mode === 'instant' ? !!a : gs.submitted;
   const showExp = done || (state.mode === 'exam' && gs.submitted);
@@ -468,6 +516,8 @@ addEventListener('keydown', e => {
     const el = inView('#qs .q:not(.done)');
     const btn = el && el.querySelector(`.opt[data-l="${letter}"]`);
     if(btn && !btn.disabled){ e.preventDefault(); btn.click(); }
+  } else if(k === 's'){
+    const el = inView('#qs .q'), b = el && el.querySelector('.reveal'); if(b){ e.preventDefault(); b.click(); }
   } else if(k === 'f'){
     const el = inView('#qs .q'); if(el){ e.preventDefault(); el.querySelector('.flag').click(); }
   } else if(k === 'n'){
